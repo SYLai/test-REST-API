@@ -1,0 +1,17 @@
+{
+  "name": "rest",
+  "version": "1.0.0",
+  "description": "REST API ",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Lai Shi Yu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase": "^8.1.2",
+    "mysql": "^2.18.1",
+    "newman": "^5.2.1"
+  }
+}
