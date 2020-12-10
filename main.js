@@ -62,7 +62,13 @@ app.post("/messages", function (req, res){
 app.get("/messages/:msgId", function (req, res) {
     con.query("SELECT * FROM messages WHERE id =?", [req.params.msgId], function(err, result){
         if (err) throw err;
-        res.send(result);
+        if (result.length > 0) {
+            res.send(result);
+        }
+        else {
+            res.send("Message id " + req.params.msgId + " does not exist");
+        }
+        
     })
 })
 
