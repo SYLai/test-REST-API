@@ -11,8 +11,7 @@ var con = mysql.createConnection( {
 con.connect(function(err) {
     if (err) throw err;
     console.log("connected to database");
-    //date = new Date();
-    //console.log(date.toISOString().slice(0,19).replace('T',' '));
+    
 })
 
 //msg constructor
@@ -23,6 +22,9 @@ var msg = {
     title : '',
     message: ''
 };
+
+//date = new Date();
+//console.log(date.toISOString().slice(0,19).replace('T',' '));
 
 app.get("/", (req, res) => res.send(msg));
 app.listen(3000, () => console.log("Server listening on port 3000"));
