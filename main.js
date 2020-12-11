@@ -82,20 +82,21 @@ app.get("/messages/:msgId", function (req, res) {
 
 //hash function
 function hash(password) {
-    const salt = crypto.randomBytes(16).toString('hex');
-    var hashPwd = "";
+    const key = crypto.createHash("sha256").update(password).digest("base64");
+    return key;
+
 }
 
 //verify hash 
 function verifyHash(password, hash) {
-    
+    const key = crypto.createHash("sha256").update(password).digest("base64");
+    return key == hash;
 }
 
 //register user
 app.post("/register", function (req, res) {
     //hash the password
-    //hashPwd = hash(req.body.password);
-    hashPwd = req.body.password;
+    hashPwd = hash(req.body.password);
     user.createUser(req.body.username, hashPwd);
     
     var token = generateToken(req.body.username);
@@ -118,11 +119,10 @@ app.get("/user", function  (req, res) {
 
 //login user
 app.post("/login", function (req,res) {
-    //verify password
-    //isPwdMatch = verifyHash(req.body.password, user.password);
     var currUser = user.findUser(req.body.username);
     if (currUser.length == 0) return res.status(404).send({auth : false});
-    isPwdMatch = currUser[1] == req.body.password;
+    //verify password
+    isPwdMatch = verifyHash(req.body.password, currUser[1]);    
     if (!isPwdMatch) return res.status(401).send({auth : false});
 
     var token = generateToken(user.username);
