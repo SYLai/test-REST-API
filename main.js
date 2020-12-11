@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+//testing use only, to be removed
+const secret = require("crypto").randomBytes(64).toString('hex'); 
+
 var con = mysql.createConnection( {
     host : "localhost",
     user : "root",
@@ -27,8 +30,10 @@ var msg = {
     messege : ""
 };
 
-//date = new Date();
-//console.log(date.toISOString().slice(0,19).replace('T',' '));
+//generate token
+function generateToken(username){
+    return jwt.sign(username, secret, {expiresIn : '24h'});
+}
 
 //homepage
 app.get("/", (req, res) => res.send(msg));
