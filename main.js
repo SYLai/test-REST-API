@@ -1,6 +1,7 @@
-var app = require("express")();
-var bodyParser = require("body-parser");
-var mysql = require("mysql");
+const app = require("express")();
+const bodyParser = require("body-parser");
+const mysql = require("mysql");
+const jwt = require("jsonwebtoken");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
