@@ -32,11 +32,6 @@ var msg = {
     messege : ""
 };
 
-//generate token
-function generateToken(username){
-    return jwt.sign({user : username}, secret, {expiresIn : 86400 }); //token expires in 24 hours
-}
-
 //homepage
 app.get("/", (req, res) => res.send(msg));
 //list messages
@@ -80,6 +75,12 @@ app.get("/messages/:msgId", function (req, res) {
     })
 })
 
+//jwt section
+//generate token function
+function generateToken(username){
+    return jwt.sign({user : username}, secret, {expiresIn : 86400 }); //token expires in 24 hours
+}
+
 //hash function
 function hash(password) {
     const key = crypto.createHash("sha256").update(password).digest("base64");
@@ -87,7 +88,7 @@ function hash(password) {
 
 }
 
-//verify hash 
+//verify hash function
 function verifyHash(password, hash) {
     const key = crypto.createHash("sha256").update(password).digest("base64");
     return key == hash;
