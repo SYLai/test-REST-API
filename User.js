@@ -1,27 +1,34 @@
-class User {
-    constructor(username, password){
-        this.username = username;
-        this.password = password;
-    }
-}
+/*const mysql = require("mysql");
 
-var userList = [];
+var con = mysql.createConnection( {
+    host : "localhost",
+    user : "root",
+    password : "",
+    database : "msgdb"
+})
+
+con.connect(function(err) {
+    if (err) throw err;
+    console.log("connected to database");
+})
+*/
+userList = [] //use mysql database
 
 const createUser = (username, password) => {
-    let user = new User(username, password);
+    var user = [username, password];
     userList.push(user);
 }
 
 const findUser = (searchname) => {
-    userList.forEach(function (username, i, array) {
-        if (searchname == username){
+    for (i = 0; i < userList.length; i++){
+        if (userList[i][0] == searchname){
             return userList[i];
         }
-    })
+    }
+    return []
 }
 
 module.exports = { 
-    userList : userList,
     createUser : createUser,
     findUser : findUser
 }

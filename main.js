@@ -98,12 +98,12 @@ app.post("/register", function (req, res) {
     hashPwd = req.body.password;
     user.createUser(req.body.username, hashPwd);
     
-    var token = generateToken(user.username);
+    var token = generateToken(req.body.username);
     res.status(200).send({auth : true, token : token});
 
 });
 
-//veryfy user
+//verify user
 app.get("/user", function  (req, res) {
     var token = req.headers['authentication'];
     if (!token) return res.status(401).send({auth: false});
@@ -118,11 +118,10 @@ app.get("/user", function  (req, res) {
 
 //login user
 app.post("/login", function (req,res) {
-    console.log(user.userList);
     //verify password
     //isPwdMatch = verifyHash(req.body.password, user.password);
     var currUser = user.findUser(req.body.username);
-    isPwdMatch = currUser.password == req.body.password;
+    isPwdMatch = currUser[1] == req.body.password;
     if (!isPwdMatch) return res.status(401).send({auth : false});
 
     var token = generateToken(user.username);
