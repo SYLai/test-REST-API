@@ -121,6 +121,7 @@ app.post("/login", function (req,res) {
     //verify password
     //isPwdMatch = verifyHash(req.body.password, user.password);
     var currUser = user.findUser(req.body.username);
+    if (currUser.length == 0) return res.status(404).send({auth : false});
     isPwdMatch = currUser[1] == req.body.password;
     if (!isPwdMatch) return res.status(401).send({auth : false});
 
