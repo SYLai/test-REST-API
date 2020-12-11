@@ -61,7 +61,7 @@ app.post("/messages", function (req, res){
     
 });
 
-//view message
+//view indivisual message
 app.get("/messages/:msgId", function (req, res) {
     con.query("SELECT * FROM messages WHERE id =?", [req.params.msgId], function(err, result){
         if (err) throw err;
@@ -72,6 +72,19 @@ app.get("/messages/:msgId", function (req, res) {
             res.send("Message id " + req.params.msgId + " does not exist");
         }
         
+    })
+})
+
+//view message to specific recipient
+app.get("/user/:username", function (req, res) {
+    con.query("SELECT * FROM messages WHERE recipient =?", [req.params.username], function(err, result){
+        if (err) throw err;
+        if(result.length > 0) {
+            res.send(result);
+        }
+        else {
+            res.send("User " + req.params.username + " do not have messages");
+        }
     })
 })
 
