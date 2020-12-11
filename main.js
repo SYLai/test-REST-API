@@ -2,12 +2,14 @@ const app = require("express")();
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const user = require("/User");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //testing use only, to be removed
-const secret = require("crypto").randomBytes(64).toString('hex'); 
+const secret = crypto.randomBytes(64).toString('hex'); 
 
 var con = mysql.createConnection( {
     host : "localhost",
@@ -76,6 +78,14 @@ app.get("/messages/:msgId", function (req, res) {
         }
         
     })
+})
+
+//register user
+app.post("/register", function (req, res) {
+    //hash the password
+    hashPwd = crypto.createHash("sha256");
+
+
 })
 
 //listening to port 3000
