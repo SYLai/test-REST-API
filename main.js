@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const User = require("./User");
+const user = require("./User");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -80,11 +80,23 @@ app.get("/messages/:msgId", function (req, res) {
     })
 })
 
+//hash function
+function hash(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    var hashPwd = "";
+}
+
+//verify hash 
+function verifyHash(password, hash) {
+    
+}
+
 //register user
 app.post("/register", function (req, res) {
     //hash the password
-    hashPwd = crypto.createHash("sha256");
-    let user = new User(req.body.username, hashPwd);
+    //hashPwd = hash(req.body.password);
+    hashPwd = req.body.password;
+    user.createUser(req.body.username, hashPwd);
     
     var token = generateToken(user.username);
     res.status(200).send({auth : true, token : token});
@@ -92,6 +104,30 @@ app.post("/register", function (req, res) {
 });
 
 //veryfy user
+app.get("/user", function  (req, res) {
+    var token = req.headers['authentication'];
+    if (!token) return res.status(401).send({auth: false});
+
+    jwt.verify(token, secret, function (err, decoded) {
+        if (err) return res.status(500).send({auth : false});
+
+        res.status(200).send(decoded);
+    })
+
+});
+
+//login user
+app.post("/login", function (req,res) {
+    console.log(user.userList);
+    //verify password
+    //isPwdMatch = verifyHash(req.body.password, user.password);
+    var currUser = user.findUser(req.body.username);
+    isPwdMatch = currUser.password == req.body.password;
+    if (!isPwdMatch) return res.status(401).send({auth : false});
+
+    var token = generateToken(user.username);
+    res.status(200).send({auth : true, token : token});
+})
 
 //listening to port 3000
 app.listen(3000, () => console.log("Server listening on port 3000"));
