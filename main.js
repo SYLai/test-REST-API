@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const user = require("/User");
+const User = require("./User");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -34,7 +34,7 @@ var msg = {
 
 //generate token
 function generateToken(username){
-    return jwt.sign(username, secret, {expiresIn : '24h'});
+    return jwt.sign({user : username}, secret, {expiresIn : 86400 }); //token expires in 24 hours
 }
 
 //homepage
@@ -84,9 +84,14 @@ app.get("/messages/:msgId", function (req, res) {
 app.post("/register", function (req, res) {
     //hash the password
     hashPwd = crypto.createHash("sha256");
+    let user = new User(req.body.username, hashPwd);
+    
+    var token = generateToken(user.username);
+    res.status(200).send({auth : true, token : token});
 
+});
 
-})
+//veryfy user
 
 //listening to port 3000
 app.listen(3000, () => console.log("Server listening on port 3000"));
